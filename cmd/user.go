@@ -1,5 +1,6 @@
 package main
 
 type User struct {
-	name string
+	FirstName string `json:"FirstName"`
+	LastName  string `json:"LastName"`
 }
