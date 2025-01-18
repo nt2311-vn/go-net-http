@@ -1,20 +1,6 @@
 package main
 
-import (
-	"net/http"
-)
-
-type api struct {
-	addr string
-}
-
-func (a *api) getUsersHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Users list..."))
-}
-
-func (a *api) createUsersHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Created user"))
-}
+import "net/http"
 
 func main() {
 	api := &api{addr: ":8080"}
