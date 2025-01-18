@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 )
 
@@ -32,6 +33,31 @@ func (a *api) createUsersHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	u := User{FirstName: user.FirstName, LastName: user.LastName}
-	users = append(users, u)
+	if err := insertUser(u); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
 	w.WriteHeader(http.StatusCreated)
+}
+
+func insertUser(u User) error {
+	if u.FirstName == "" {
+		return errors.New("first name is required")
+	}
+
+	if u.LastName == "" {
+		return errors.New("last name is required")
+	}
+
+	// Check duplicate
+
+	for _, user := range users {
+		if user.FirstName == u.FirstName && user.LastName == u.LastName {
+			return errors.New("User already exist")
+		}
+	}
+
+	users = append(users, u)
+	return nil
 }
